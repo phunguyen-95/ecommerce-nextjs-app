@@ -2,7 +2,7 @@
 
 import Stripe from "stripe";
 import { ProductCard } from "./product-card";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 interface Props {
   products: Stripe.Product[];
@@ -18,7 +18,11 @@ export const ProductList = ({ products }: Props) => {
       product?.description?.toLowerCase().includes(term) || false;
     return nameMatch || descriptionMatch;
   });
-  const onSearch = (e) => setSearchTerm(e.target.value);
+
+  const onSearch = (e?: ChangeEvent<HTMLInputElement>) => {
+    if (!e?.target.value) return;
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <div>

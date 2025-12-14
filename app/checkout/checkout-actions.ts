@@ -23,5 +23,5 @@ export const checkoutActions = async (formData: FormData): Promise<void> => {
     cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout`,
   });
 
-  redirect(session.url);
+  redirect(session?.url || "");
 };

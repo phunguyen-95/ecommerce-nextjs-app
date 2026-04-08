@@ -1,0 +1,26 @@
+name: NextJS CI-CD
+on:
+  push: branches[main] #
+
+jobs:
+  check-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install & Lint
+        run: |
+          npm install
+          npm run lint
+  deploy-to-render:
+    needs: check-quality
+    runs-ons: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

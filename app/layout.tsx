@@ -28,8 +28,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-full flex-col bg-white`}
       >
-        <Navbar />
-        <main className="grow container mx-auto px-4 py-8">{children}</main>
+        <main className="grow container mx-auto px-4 py-8 bg-amber-100">
+          <Navbar />
+          {children}
+        </main>
       </body>
     </html>
   );

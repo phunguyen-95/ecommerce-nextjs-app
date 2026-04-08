@@ -1,6 +1,7 @@
 name: NextJS CI-CD
 on:
-  push: branches[main] #
+  push:
+    branches: [main] #
 
 jobs:
   check-quality:
@@ -18,9 +19,10 @@ jobs:
         run: |
           npm install
           npm run lint
+  
   deploy-to-render:
     needs: check-quality
-    runs-ons: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Trigger Render Deploy
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

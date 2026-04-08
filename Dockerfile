@@ -8,6 +8,10 @@ RUN npm install
 # Build
 FROM node:20-alpine as builder
 WORKDIR /app
+
+ARG STRIPE_SECRET_KEY
+ENV STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1

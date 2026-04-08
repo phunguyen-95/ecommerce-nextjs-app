@@ -2,8 +2,37 @@ name: NextJS CI-CD
 on:
   push:
     branches: [main] #
+  workflow_dispatch:
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        use: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          build-args: |
+            STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+            NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+
   check-quality:
     runs-on: ubuntu-latest
     steps:
@@ -19,7 +48,7 @@ jobs:
         run: |
           npm install
           npm run lint
-  
+
   deploy-to-render:
     needs: check-quality
     runs-on: ubuntu-latest

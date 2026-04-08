@@ -3,7 +3,7 @@
 FROM node:20-alpine as deps
 WORKDIR /app
 COPY package*.json ./
-RUN npm Install
+RUN npm install
 
 # Build
 FROM node:20-alpine as builder
